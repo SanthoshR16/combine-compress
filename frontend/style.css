@@ -1,0 +1,461 @@
+/* ──── Reset & Tokens ──── */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --bg: #f0f2f5;
+    --card: #ffffff;
+    --text: #1a1a2e;
+    --text-2: #64748b;
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --primary-light: rgba(99, 102, 241, 0.07);
+    --gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
+    --border: #e2e8f0;
+    --success: #10b981;
+    --success-light: rgba(16, 185, 129, 0.1);
+    --error: #ef4444;
+    --error-light: rgba(239, 68, 68, 0.08);
+    --radius: 14px;
+    --radius-sm: 10px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 6px 16px rgba(0,0,0,0.04);
+    --shadow-lg: 0 4px 6px -1px rgba(0,0,0,0.08), 0 12px 24px -4px rgba(0,0,0,0.06);
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ──── Layout ──── */
+
+.container {
+    max-width: 660px;
+    margin: 0 auto;
+    padding: 2.5rem 1rem 2rem;
+}
+
+/* ──── Header ──── */
+
+header { text-align: center; margin-bottom: 2rem; }
+
+.logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    color: var(--text-2);
+    font-size: 0.95rem;
+    margin-top: 0.25rem;
+}
+
+/* ──── Tabs ──── */
+
+.tabs {
+    display: flex;
+    background: var(--card);
+    border-radius: var(--radius) var(--radius) 0 0;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.tab {
+    flex: 1;
+    padding: 0.9rem 1rem;
+    border: none;
+    background: none;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-2);
+    cursor: pointer;
+    transition: color 0.2s, background 0.2s;
+    border-bottom: 2.5px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+.tab:hover { color: var(--text); background: var(--primary-light); }
+.tab.active { color: var(--primary); border-bottom-color: var(--primary); background: var(--primary-light); }
+
+/* ──── Card ──── */
+
+.card {
+    background: var(--card);
+    border-radius: 0 0 var(--radius) var(--radius);
+    box-shadow: var(--shadow);
+    padding: 1.75rem;
+    position: relative;
+    min-height: 320px;
+}
+
+/* ──── Panels ──── */
+
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* ──── Dropzone ──── */
+
+.dropzone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.25s, background 0.25s, transform 0.15s;
+    min-height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dropzone:hover, .dropzone.dragover {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    transform: scale(1.005);
+}
+
+.dropzone[hidden] { display: none; }
+
+.dropzone-inner { pointer-events: none; }
+
+.dropzone-icon {
+    color: var(--text-2);
+    margin-bottom: 0.75rem;
+    transition: color 0.25s, transform 0.25s;
+}
+
+.dropzone:hover .dropzone-icon,
+.dropzone.dragover .dropzone-icon {
+    color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.dropzone p { font-weight: 500; margin-bottom: 0.2rem; }
+
+.hint {
+    color: var(--text-2);
+    font-size: 0.82rem;
+    font-weight: 400;
+}
+
+/* ──── File List (combine) ──── */
+
+.filelist { margin-top: 1rem; }
+
+.file-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.65rem 0.85rem;
+    background: #f8fafc;
+    border-radius: var(--radius-sm);
+    margin-bottom: 0.4rem;
+    animation: slideIn 0.2s ease;
+    transition: background 0.15s, box-shadow 0.15s, opacity 0.15s;
+    cursor: grab;
+    user-select: none;
+}
+
+.file-item:active { cursor: grabbing; }
+.file-item:hover { background: #f1f5f9; }
+.file-item.dragging { opacity: 0.4; }
+.file-item.drag-over { box-shadow: inset 0 -2px 0 0 var(--primary); }
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.file-icon { color: var(--primary); flex-shrink: 0; }
+
+.file-name {
+    flex: 1;
+    font-size: 0.88rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+.file-size {
+    color: var(--text-2);
+    font-size: 0.78rem;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.file-actions { display: flex; gap: 2px; flex-shrink: 0; }
+
+.file-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-2);
+    padding: 0.3rem;
+    border-radius: 6px;
+    transition: color 0.15s, background 0.15s;
+    display: flex;
+    align-items: center;
+    line-height: 1;
+}
+
+.file-btn:hover { color: var(--error); background: var(--error-light); }
+.file-btn.move:hover { color: var(--primary); background: var(--primary-light); }
+.file-btn:disabled { opacity: 0.25; pointer-events: none; }
+
+/* ──── Compress: file info ──── */
+
+.file-info {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.65rem 0.85rem;
+    background: #f8fafc;
+    border-radius: var(--radius-sm);
+    margin-top: 1rem;
+    animation: slideIn 0.2s ease;
+}
+
+.file-info[hidden] { display: none; }
+
+/* ──── Compression levels ──── */
+
+.levels {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+    justify-content: center;
+}
+
+.levels[hidden] { display: none; }
+
+.level-option input { position: absolute; opacity: 0; pointer-events: none; }
+
+.level-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.6rem 1.5rem;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text-2);
+    gap: 0.1rem;
+}
+
+.level-label small {
+    font-size: 0.72rem;
+    font-weight: 400;
+    opacity: 0.7;
+}
+
+.level-option input:checked + .level-label {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-light);
+}
+
+.level-label:hover { border-color: var(--primary); }
+
+/* ──── Buttons ──── */
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 0.85rem 1.5rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 1.5rem;
+}
+
+.btn.primary {
+    background: var(--gradient);
+    color: #fff;
+    box-shadow: 0 2px 10px rgba(99, 102, 241, 0.25);
+}
+
+.btn.primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.35);
+}
+
+.btn.primary:active:not(:disabled) { transform: translateY(0); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.btn.secondary {
+    background: #f8fafc;
+    color: var(--text);
+    border: 1.5px solid var(--border);
+}
+
+.btn.secondary:hover { background: #f1f5f9; }
+
+/* ──── Overlay ──── */
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    border-radius: 0 0 var(--radius) var(--radius);
+    animation: fadeIn 0.2s ease;
+}
+
+.overlay[hidden] { display: none; }
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.status-content {
+    text-align: center;
+    padding: 2rem;
+    width: 100%;
+    max-width: 340px;
+}
+
+.status-content > div[hidden] { display: none; }
+
+/* ──── Spinner ──── */
+
+.spinner {
+    width: 44px;
+    height: 44px;
+    border: 3px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.status-text { font-weight: 600; color: var(--text); font-size: 1rem; }
+
+/* ──── Progress bar ──── */
+
+.progress-bar {
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--gradient);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+    width: 0%;
+}
+
+/* ──── Success ──── */
+
+.success-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--success-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.success-icon svg { color: var(--success); }
+.success-text { color: var(--success) !important; }
+
+@keyframes popIn {
+    from { transform: scale(0); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+
+.size-info {
+    font-size: 0.85rem;
+    color: var(--text-2);
+    margin-top: 0.35rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+.size-info .reduction { color: var(--success); font-weight: 700; }
+
+/* ──── Error ──── */
+
+.error-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--error-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.error-icon svg { color: var(--error); }
+
+.error-text {
+    color: var(--error);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    word-break: break-word;
+}
+
+/* ──── Footer ──── */
+
+footer {
+    text-align: center;
+    margin-top: 2rem;
+    color: var(--text-2);
+    font-size: 0.78rem;
+}
+
+/* ──── Responsive ──── */
+
+@media (max-width: 520px) {
+    .container { padding: 1.25rem 0.75rem; }
+    .card { padding: 1.25rem; }
+    .dropzone { padding: 2rem 1rem; min-height: 150px; }
+    header h1 { font-size: 1.4rem; }
+    .levels { gap: 0.4rem; }
+    .level-label { padding: 0.5rem 1rem; font-size: 0.82rem; }
+    .file-item { gap: 0.4rem; padding: 0.55rem 0.65rem; font-size: 0.82rem; }
+    .tab { font-size: 0.82rem; padding: 0.75rem 0.5rem; gap: 0.25rem; }
+    .tab svg { width: 15px; height: 15px; }
+}
